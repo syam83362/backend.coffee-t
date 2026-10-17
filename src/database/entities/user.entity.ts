@@ -4,6 +4,8 @@ import { RefreshSessionEntity } from './refresh-session.entity';
 export enum UserRole {
   CUSTOMER = 'customer',
   ADMIN = 'admin',
+  CAFE_MANAGER = 'cafe_manager',
+  WAITER = 'waiter',
 }
 
 @Entity({ name: 'users' })

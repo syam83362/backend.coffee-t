@@ -18,7 +18,7 @@ async function bootstrap(): Promise<void> {
     origin: config.getOrThrow<string>('FRONTEND_ORIGIN'),
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'X-CSRF-Token'],
+    allowedHeaders: ['Content-Type', 'X-CSRF-Token', 'X-Cafe-Table-Token'],
   });
   app.use(csrf.protection);
   app.useGlobalPipes(

@@ -22,6 +22,25 @@ export function validateEnvironment(
     }
   }
 
+  const bookingSettings: Record<string, [number, number]> = {
+    BOOKING_DURATION_MINUTES: [30, 240],
+    BOOKING_SLOT_MINUTES: [15, 120],
+    BOOKING_ADVANCE_DAYS: [1, 365],
+    BOOKING_CANCELLATION_CUTOFF_MINUTES: [0, 10080],
+  };
+  for (const [key, [minimum, maximum]] of Object.entries(bookingSettings)) {
+    if (config[key] === undefined) continue;
+    const value = Number(config[key]);
+    if (!Number.isInteger(value) || value < minimum || value > maximum) {
+      throw new Error(`${key} must be an integer between ${minimum} and ${maximum}`);
+    }
+  }
+  const duration = Number(config.BOOKING_DURATION_MINUTES ?? 90);
+  const slot = Number(config.BOOKING_SLOT_MINUTES ?? 30);
+  if (duration % slot !== 0) {
+    throw new Error('BOOKING_DURATION_MINUTES must be a multiple of BOOKING_SLOT_MINUTES');
+  }
+
   const frontendOrigin = new URL(config.FRONTEND_ORIGIN as string);
   if (!['http:', 'https:'].includes(frontendOrigin.protocol)) {
     throw new Error('FRONTEND_ORIGIN must use HTTP or HTTPS');

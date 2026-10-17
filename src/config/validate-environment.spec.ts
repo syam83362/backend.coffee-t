@@ -33,4 +33,16 @@ describe('validateEnvironment', () => {
       validateEnvironment({ ...validEnvironment, FRONTEND_ORIGIN: 'ftp://localhost' }),
     ).toThrow('FRONTEND_ORIGIN must use HTTP or HTTPS');
   });
+
+  it('rejects reservation windows outside supported bounds', () => {
+    expect(() =>
+      validateEnvironment({ ...validEnvironment, BOOKING_ADVANCE_DAYS: '400' }),
+    ).toThrow('BOOKING_ADVANCE_DAYS must be an integer between 1 and 365');
+  });
+
+  it('requires reservation duration to align with the slot interval', () => {
+    expect(() =>
+      validateEnvironment({ ...validEnvironment, BOOKING_DURATION_MINUTES: '100' }),
+    ).toThrow('BOOKING_DURATION_MINUTES must be a multiple of BOOKING_SLOT_MINUTES');
+  });
 });
